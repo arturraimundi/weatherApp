@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-header">
+    <h1>Weather App</h1>
+  </div>
+  <div class="card-body">
+    <div class="container">
+    <h2>Enter your city</h2>
+  <input [(ngModel)]="city" placeholder="City Name" />
+  <button (click)="searchWeather()">Search</button>
+
+  <div *ngIf="weatherData" @fadeInOut>
+    <div class="weather-info">
+      <h2>{{ weatherData.location.name }}: {{ weatherData.current.temp_c}} °C</h2> <img [src]="weatherData.current.condition.icon" alt="climate icon" />
+    </div>
+    
+    
+    <h2>weather: {{ weatherData.current.condition.text }}</h2>
+  </div>
+  <p *ngIf="error" style="color:red">{{ error }}</p>
+</div>
+</div>
+
+<footer>
+  <p>Weather App© - </p>
+  <a href="https://github.com/arturraimundi" class="custom-link">Code Here</a>
+</footer>
+

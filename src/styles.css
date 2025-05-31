@@ -1,0 +1,14 @@
+:root {
+  --background-color: #332c3e;
+  --text-color: #ffffff;
+  --border-radius: 8px;
+  --font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
