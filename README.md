@@ -24,3 +24,5 @@ cd weather-app
 npm install
 ng serve
 ```
+
+Acesse o site aqui -> https://weather-delta-neon.vercel.app/
