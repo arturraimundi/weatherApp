@@ -26,3 +26,6 @@ ng serve
 ```
 
 Acesse o site aqui -> https://weather-delta-neon.vercel.app/
+<img width="664" height="499" alt="image" src="https://github.com/user-attachments/assets/dc970501-35a0-4688-a935-c5865e10c55f" />
+
+<img width="673" height="683" alt="image" src="https://github.com/user-attachments/assets/2d84b828-46a6-433b-8c9f-843038afc3fd" />
