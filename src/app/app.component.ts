@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WeatherService } from './weather.service';
+import { LocationService } from './locationService';
 import { trigger, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -26,9 +28,10 @@ export class AppComponent {
   weatherData: any = null;
   error: string = '';
 
-  constructor(private weatherService: WeatherService) {}
-
+  constructor(private weatherService: WeatherService, private locationService: LocationService) {}
+ 
   searchWeather() {
+    
     this.weatherService.getWeather(this.city).subscribe({
       next: (data) => {
         this.weatherData = data;
@@ -39,5 +42,7 @@ export class AppComponent {
         this.weatherData = null;
       }
     });
+
   }
+  
 }
