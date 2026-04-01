@@ -54,10 +54,12 @@
 
     }
     weatherbyLocation() {
-      this.weatherService.getWeatherbyCord(this.userLocation.lat.toString, this.userLocation.long.toString).subscribe({
+      this.weatherService.getWeatherbyCord(this.userLocation.lat.toString(), this.userLocation.long.toString()).subscribe({
         next: (data) => {
           this.weatherData = data;
           this.error = '';
+          console.log(this.userLocation.lat);
+          console.log(this.userLocation.long);
           console.log(this.weatherData.city);
         },
         error: (err) => {
