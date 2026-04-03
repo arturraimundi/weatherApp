@@ -4,9 +4,9 @@
   </div>
   <div class="card-body">
     <div class="container">
-    <h2>Enter your city</h2>
+    <h2>Cidade</h2>
   <input [(ngModel)]="city" placeholder="City Name" />
-  <button (click)="searchWeather()">Search</button>
+  <button (click)="searchWeather()">Pesquisar</button>
 
   <div *ngIf="weatherData" @fadeInOut>
     <div class="weather-info">
@@ -14,7 +14,7 @@
     </div>
     
     
-    <h2>weather: {{ weatherData.current.condition.text }}</h2>
+    <h2>{{ weatherData.current.condition.text }}</h2>
   </div>
   <p *ngIf="error" style="color:red">{{ error }}</p>
 </div>
@@ -22,6 +22,6 @@
 
 <footer>
   <p>Weather App© - </p>
-  <a href="https://github.com/arturraimundi" class="custom-link">Code Here</a>
+  <a href="https://github.com/arturraimundi" class="custom-link">código aqui</a>
 </footer>
 

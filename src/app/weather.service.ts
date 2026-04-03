@@ -13,11 +13,11 @@ export class WeatherService {
   constructor(private http: HttpClient) {}
 
   getWeather(city: string): Observable<any> {
-    const url = `${this.apiUrl}?key=${this.apiKey}&q=${city}&lang=en`;
+    const url = `${this.apiUrl}?key=${this.apiKey}&q=${city}&lang=pt`;
     return this.http.get(url);
   }
   getWeatherbyCord(Lat: string, Long: string): Observable<any> {
-    const url = `${this.apiUrl}?key=${this.apiKey}&q=${Lat},${Long}&lang=en`;
+    const url = `${this.apiUrl}?key=${this.apiKey}&q=${Lat},${Long}&lang=ot`;
     return this.http.get(url);
   }
 }
