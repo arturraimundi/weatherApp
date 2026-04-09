@@ -1,46 +1,56 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# =========================
+# Node / Angular / Vite
+# =========================
+node_modules/
+dist/
+Web/weather-app/.tsbuildinfo
+Web/weather-app/vite/deps/
+Web/weather-app/vite/deps_ssr/
+npm-debug.log*
+yarn-error.log*
+/.angular/cache
+/.sass-cache
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# Environment files
+Web/.env
+Web/environments/environment.ts
+Web/.env.example  # se quiser versionar o exemplo, mantenha
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# =========================
+# .NET / C#
+# =========================
+bin/
+obj/
+publish/
+*.user
+*.suo
+*.userosscache
+*.nupkg
+*.csproj.user
+*.sln.docstates
+appsettings.Development.json
 
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
+# =========================
+# IDEs / Editors
+# =========================
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+.idea/
+.project
+.classpath
+*.launch
+.settings/
+.vs/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+# =========================
+# Logs / Temp / OS
+# =========================
+*.log
+*.tmp
+*.temp
+TestResults/
 .DS_Store
 Thumbs.db
-
-#environment files
-/src/environments/environment.ts
-/environments/
+.history/
