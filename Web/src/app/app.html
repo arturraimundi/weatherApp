@@ -1,27 +1,198 @@
-<div class="card">
-  <div class="card-header">
-    <h1>Weather App</h1>
-  </div>
-  <div class="card-body">
-    <div class="container">
-    <h2>Cidade</h2>
-  <input [(ngModel)]="city" placeholder="City Name" />
-  <button (click)="searchWeather()">Pesquisar</button>
+<app-login *ngIf="!currentUser" @fadeInOut></app-login>
 
-  <div *ngIf="weatherData" @fadeInOut>
-    <div class="weather-info">
-      <h2>{{ weatherData.location.name }}: {{ weatherData.current.temp_c}} °C</h2> <img [src]="weatherData.current.condition.icon" alt="climate icon" />
+<div *ngIf="currentUser" class="dashboard">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <h1>🌤️ WeatherApp</h1>
+      </div>
+      <div class="user-info">
+        <span class="username">Olá, {{ currentUser.username }}!</span>
+        <button (click)="logout()" class="btn-logout">Sair</button>
+      </div>
     </div>
-    
-    
-    <h2>{{ weatherData.current.condition.text }}</h2>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- SEARCH SECTION -->
+    <div class="search-section">
+      <div class="search-box">
+        <input 
+          [(ngModel)]="city" 
+          placeholder="Pesquisar uma cidade..." 
+          (keyup.enter)="searchWeather()"
+          class="search-input"
+        />
+        <button (click)="searchWeather()" class="btn-search">
+          <span *ngIf="!isLoading">🔍 Pesquisar</span>
+          <span *ngIf="isLoading">⏳ Carregando...</span>
+        </button>
+        <button (click)="weatherbyLocation()" class="btn-location">📍 Minha Localização</button>
+      </div>
+      <p *ngIf="error" class="error-message">{{ error }}</p>
+    </div>
+
+    <!-- WEATHER DISPLAY -->
+    <div *ngIf="weatherData" class="weather-container" @fadeInOut>
+      <!-- CURRENT WEATHER -->
+      <div class="current-weather">
+        <div class="weather-header">
+          <div class="location-info">
+            <h2>{{ weatherData.city || city }}</h2>
+            <p class="last-updated">Atualizado em: {{ weatherData.lastUpdated }}</p>
+          </div>
+          <img [src]="weatherData.conditionIcon" alt="weather icon" class="weather-icon-large" />
+        </div>
+
+        <div class="temperature-display">
+          <div class="main-temp">
+            <span class="temp-value">{{ weatherData.temperature | number:'1.0-0' }}</span>
+            <span class="temp-unit">°C</span>
+          </div>
+          <div class="condition-info">
+            <p class="condition">{{ weatherData.condition }}</p>
+            <p class="feels-like">Sensação térmica: {{ weatherData.feelsLike | number:'1.0-0' }}°C</p>
+          </div>
+        </div>
+
+        <!-- TABS NAVIGATION -->
+        <div class="tabs">
+          <button 
+            [class.active]="activeTab === 'current'"
+            (click)="setActiveTab('current')"
+            class="tab-button"
+          >
+            Atual
+          </button>
+          <button 
+            [class.active]="activeTab === 'details'"
+            (click)="setActiveTab('details')"
+            class="tab-button"
+          >
+            Detalhes
+          </button>
+          <button 
+            [class.active]="activeTab === 'forecast'"
+            (click)="setActiveTab('forecast')"
+            class="tab-button"
+          >
+            Previsão
+          </button>
+          <button 
+            [class.active]="activeTab === 'alerts'"
+            (click)="setActiveTab('alerts')"
+            class="tab-button"
+          >
+            Alertas
+          </button>
+        </div>
+
+        <!-- TAB CONTENT -->
+        <div class="tab-content">
+          <!-- CURRENT TAB -->
+          <div *ngIf="activeTab === 'current'" class="tab-pane" @fadeInOut>
+            <div class="metrics-grid">
+              <div class="metric">
+                <span class="metric-icon">💧</span>
+                <span class="metric-label">Umidade</span>
+                <span class="metric-value">{{ weatherData.humidity | number:'1.0-0' }}%</span>
+              </div>
+              <div class="metric">
+                <span class="metric-icon">💨</span>
+                <span class="metric-label">Vento</span>
+                <span class="metric-value">{{ weatherData.windSpeed | number:'1.0-0' }} km/h</span>
+              </div>
+              <div class="metric">
+                <span class="metric-icon">👁️</span>
+                <span class="metric-label">Visibilidade</span>
+                <span class="metric-value">{{ weatherData.visibility | number:'1.0-0' }} km</span>
+              </div>
+              <div class="metric">
+                <span class="metric-icon">📊</span>
+                <span class="metric-label">Pressão</span>
+                <span class="metric-value">{{ weatherData.pressure | number:'1.0-0' }} mb</span>
+              </div>
+              <div class="metric">
+                <span class="metric-icon">☀️</span>
+                <span class="metric-label">Índice UV</span>
+                <span class="metric-value">{{ weatherData.uvIndex }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DETAILS TAB -->
+          <div *ngIf="activeTab === 'details' && weatherDetails" class="tab-pane" @fadeInOut>
+            <div class="details-grid">
+              <div class="detail-card">
+                <h3>Temperatura</h3>
+                <p>Atual: {{ weatherDetails.currentTemp }}°C</p>
+                <p>Máxima: {{ weatherDetails.tempMax }}°C</p>
+                <p>Mínima: {{ weatherDetails.tempMin }}°C</p>
+                <p>Ponto de Orvalho: {{ weatherDetails.dewPoint }}°C</p>
+              </div>
+              <div class="detail-card">
+                <h3>Vento</h3>
+                <p>Velocidade: {{ weatherDetails.windSpeed }} km/h</p>
+                <p>Rajadas: {{ weatherDetails.windGust }} km/h</p>
+                <p>Direção: {{ weatherDetails.windDirection }}</p>
+              </div>
+              <div class="detail-card">
+                <h3>Atmosfera</h3>
+                <p>Umidade: {{ weatherDetails.humidity }}%</p>
+                <p>Pressão: {{ weatherDetails.pressure }} mb</p>
+                <p>Índice UV: {{ weatherDetails.uvIndex }}</p>
+                <p>Cobertura de Nuvens: {{ weatherDetails.cloudCover }}%</p>
+              </div>
+              <div class="detail-card">
+                <h3>Precipitação</h3>
+                <p>Probabilidade: {{ weatherDetails.precipitationChance }}%</p>
+                <p>Quantidade: {{ weatherDetails.precipitationAmount }} mm</p>
+                <p>Visibilidade: {{ weatherDetails.visibility }} km</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FORECAST TAB -->
+          <div *ngIf="activeTab === 'forecast' && forecast" class="tab-pane" @fadeInOut>
+            <div class="forecast-container">
+              <div *ngFor="let day of forecast.forecast" class="forecast-card">
+                <p class="forecast-date">{{ day.day }}</p>
+                <img [src]="day.icon" alt="weather" class="forecast-icon" />
+                <p class="forecast-condition">{{ day.condition }}</p>
+                <p class="forecast-temps">
+                  <span class="max">{{ day.maxTemp }}°</span>
+                  <span class="min">{{ day.minTemp }}°</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ALERTS TAB -->
+          <div *ngIf="activeTab === 'alerts' && alerts" class="tab-pane" @fadeInOut>
+            <div *ngIf="alerts.alerts && alerts.alerts.length > 0" class="alerts-list">
+              <div *ngFor="let alert of alerts.alerts" [class]="'alert alert-' + alert.severity">
+                <h4>{{ alert.title }}</h4>
+                <p>{{ alert.description }}</p>
+              </div>
+            </div>
+            <div *ngIf="!alerts.alerts || alerts.alerts.length === 0" class="no-alerts">
+              <p>✅ Nenhum alerta para esta localização</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="!weatherData && !isLoading" class="empty-state">
+      <p>👆 Pesquise por uma cidade ou use sua localização para começar</p>
+    </div>
   </div>
-  <p *ngIf="error" style="color:red">{{ error }}</p>
-</div>
-</div>
 
-<footer>
-  <p>Weather App© - </p>
-  <a href="https://github.com/arturraimundi" class="custom-link">código aqui</a>
-</footer>
-
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>WeatherApp © 2024 - <a href="https://github.com/arturraimundi" target="_blank">Código no GitHub</a></p>
+  </footer>
+</div>
